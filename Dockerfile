@@ -20,7 +20,7 @@ RUN mkdir /projects ${HOME} && \
     done
 
 # odo and oc versions have to match the ones defined in https://github.com/redhat-developer/vscode-openshift-tools/blob/master/src/tools.json
-ENV GLIBC_VERSION=2.31 \
+ENV GLIBC_VERSION=2.31-r0 \
     ODO_VERSION=v1.2.1 \
     OC_VERSION=4.3.3 \
     OC_TAG=0cbc58b \
