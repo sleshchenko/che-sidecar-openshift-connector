@@ -34,7 +34,7 @@ RUN apk add --update --no-cache bash && \
     apk --update --allow-untrusted add glibc-${GLIBC_VERSION}.apk && \
     rm -f glibc-${GLIBC_VERSION}.apk && \
     # install oc
-    wget -O- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.3.3/openshift-client-linux-${OC_VERSION}.tar.gz | tar xvz -C /usr/local/bin --strip 1 && \
+    wget -O- https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.3.3/openshift-client-linux-${OC_VERSION}.tar.gz | tar xvz oc -C /usr/local/bin && \
     # install odo
     wget -O /usr/local/bin/odo https://mirror.openshift.com/pub/openshift-v4/clients/odo/${ODO_VERSION}/odo-linux-amd64 && \
     chmod +x /usr/local/bin/odo && \
