@@ -23,7 +23,6 @@ RUN mkdir /projects ${HOME} && \
 ENV GLIBC_VERSION=2.31-r0 \
     ODO_VERSION=v1.2.1 \
     OC_VERSION=4.3.3 \
-    OC_TAG=0cbc58b \
     KUBECTL_VERSION=v1.18.3
 
 # plugin executes the commands relying on Bash
