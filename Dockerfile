@@ -24,7 +24,8 @@ ENV GLIBC_VERSION=2.31-r0 \
     ODO_VERSION=v1.2.1 \
     OC_VERSION=4.3.3 \
     KUBECTL_VERSION=v1.18.3 \
-    KUBECTX_VERSION=0.8.0
+    KUBECTX_VERSION=0.8.0 \
+    HELM_VERSION=v3.2.0
 
 RUN apk add --update --no-cache bash bash-completion ncurses pkgconfig && \
     ln -sf /bin/bash /bin/sh && \
@@ -56,7 +57,9 @@ RUN apk add --update --no-cache bash bash-completion ncurses pkgconfig && \
     ln -s ${KUBECTX_TARGET}/kubens /usr/local/bin/kubens && \
     COMPDIR=$(pkg-config --variable=completionsdir bash-completion) && \
     ln -sf ${KUBECTX_TARGET}/completion/kubens.bash $COMPDIR/kubens && \
-    ln -sf ${KUBECTX_TARGET}/completion/kubectx.bash $COMPDIR/kubectx
+    ln -sf ${KUBECTX_TARGET}/completion/kubectx.bash $COMPDIR/kubectx && \
+    # install helm
+    wget -O- https://get.helm.sh/helm-${HELM_VERSION}-linux-${ARCH}.tar.gz | tar xvz linux-${ARCH}/helm -C /usr/local/bin --strip-components=1
 
 ADD etc/entrypoint.sh /entrypoint.sh
 
