@@ -23,9 +23,10 @@ RUN mkdir /projects ${HOME} && \
 ENV GLIBC_VERSION=2.31-r0 \
     ODO_VERSION=v1.2.1 \
     OC_VERSION=4.3.3 \
-    KUBECTL_VERSION=v1.18.3
+    KUBECTL_VERSION=v1.18.3 \
+    KUBECTX_VERSION=0.8.0
 
-RUN apk add --update --no-cache bash && \
+RUN apk add --update --no-cache bash bash-completion ncurses pkgconfig && \
     ln -sf /bin/bash /bin/sh && \
     echo "source /etc/profile.d/bash_completion.sh" >> ~/.bashrc && \
     # install glibc compatibility layer package for Alpine Linux
@@ -42,7 +43,20 @@ RUN apk add --update --no-cache bash && \
     chmod +x /usr/local/bin/odo && \
     # install kubectl
     wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/${ARCH}/kubectl && \
-    chmod +x /usr/local/bin/kubectl
+    chmod +x /usr/local/bin/kubectl && \
+    # install kubectx & kubens
+    KUBECTX_TARGET=/opt/kubectx && \
+    mkdir ${KUBECTX_TARGET} && \
+    KUBECTX_NESTED_FOLDER=kubectx-${KUBECTX_VERSION} && \
+    wget -O- https://github.com/ahmetb/kubectx/archive/v${KUBECTX_VERSION}.tar.gz | tar zxf - --strip-components=1 \
+      ${KUBECTX_NESTED_FOLDER}/kubectx ${KUBECTX_NESTED_FOLDER}/kubens \
+      ${KUBECTX_NESTED_FOLDER}/completion/kubectx.bash ${KUBECTX_NESTED_FOLDER}/completion/kubens.bash \
+      -C ${KUBECTX_TARGET} && \
+    ln -s ${KUBECTX_TARGET}/kubectx /usr/local/bin/kubectx && \
+    ln -s ${KUBECTX_TARGET}/kubens /usr/local/bin/kubens && \
+    COMPDIR=$(pkg-config --variable=completionsdir bash-completion) && \
+    ln -sf ${KUBECTX_TARGET}/completion/kubens.bash $COMPDIR/kubens && \
+    ln -sf ${KUBECTX_TARGET}/completion/kubectx.bash $COMPDIR/kubectx
 
 ADD etc/entrypoint.sh /entrypoint.sh
 
